@@ -1,7 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_offline/flutter_offline.dart';
+
+import '../../Business_Logic_Layer/cubit/charcters_cubit.dart';
+import '../../Data_layer/modles/Character.dart';
+import '../../constants/colors.dart';
+import '../widgets/chracter_widget.dart';
 
 class CharactersScreen extends StatefulWidget {
   const CharactersScreen({Key? key}) : super(key: key);
@@ -20,12 +27,12 @@ class _CharactersScreenState extends State<CharactersScreen> {
     return TextField(
       controller: _searchTextController,
       cursorColor: MyColors.myGrey,
-      decoration: InputDecoration(
+      decoration:const InputDecoration(
         hintText: 'Find a character...',
         border: InputBorder.none,
         hintStyle: TextStyle(color: MyColors.myGrey, fontSize: 18),
       ),
-      style: TextStyle(color: MyColors.myGrey, fontSize: 18),
+      style:const TextStyle(color: MyColors.myGrey, fontSize: 18),
       onChanged: (searchedCharacter) {
         addSearchedFOrItemsToSearchedList(searchedCharacter);
       },
@@ -37,6 +44,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
         .where((character) =>
             character.name.toLowerCase().startsWith(searchedCharacter))
         .toList();
+        log(searchedCharacter);
+        log(searchedForCharacters.length.toString());
+
     setState(() {});
   }
 
@@ -107,7 +117,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
   }
 
   Widget showLoadingIndicator() {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(
         color: MyColors.myYellow,
       ),
@@ -115,13 +125,16 @@ class _CharactersScreenState extends State<CharactersScreen> {
   }
 
   Widget buildLoadedListWidgets() {
-    return SingleChildScrollView(
-      child: Container(
-        color: MyColors.myGrey,
-        child: Column(
-          children: [
-            buildCharactersList(),
-          ],
+    return Container(
+      color: MyColors.myGrey,
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              buildCharactersList(),
+            ],
+          ),
         ),
       ),
     );
@@ -129,22 +142,23 @@ class _CharactersScreenState extends State<CharactersScreen> {
 
   Widget buildCharactersList() {
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 2 / 3,
         crossAxisSpacing: 1,
-        mainAxisSpacing: 1,
+        mainAxisSpacing: 10,
+   
       ),
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.zero,
-      itemCount: _searchTextController.text.isEmpty
-          ? allCharacters.length
-          : searchedForCharacters.length,
+      itemCount: _searchTextController.text.isEmpty?
+           allCharacters.length
+           : searchedForCharacters.length,
       itemBuilder: (ctx, index) {
-        return CharacterItem(
-          character: _searchTextController.text.isEmpty
-              ? allCharacters[index]
+        return ChracterItem(
+          character: _searchTextController.text.isEmpty?
+               allCharacters[index]
               : searchedForCharacters[index],
         );
       },
@@ -152,7 +166,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
   }
 
   Widget _buildAppBarTitle() {
-    return Text(
+    return const Text(
       'Characters',
       style: TextStyle(color: MyColors.myGrey),
     );
@@ -161,14 +175,14 @@ class _CharactersScreenState extends State<CharactersScreen> {
   Widget buildNoInternetWidget() {
     return Center(
       child: Container(
-        color: Colors.white,
+        color: MyColors.myGrey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+         const    SizedBox(
               height: 20,
             ),
-            Text(
+         const   Text(
               'Can\'t connect .. check internet',
               style: TextStyle(
                 fontSize: 22,
@@ -188,7 +202,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
       appBar: AppBar(
         backgroundColor: MyColors.myYellow,
         leading: _isSearching
-            ? BackButton(
+            ?const BackButton(
                 color: MyColors.myGrey,
               )
             : Container(),

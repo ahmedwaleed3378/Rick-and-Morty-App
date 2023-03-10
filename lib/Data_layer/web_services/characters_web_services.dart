@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import '../../constants/constants.dart';
 import 'package:dio/dio.dart';
+
 class CharactersWebServices {
   // late Dio dio;
   // CharactersWebServices() {
@@ -13,9 +16,12 @@ class CharactersWebServices {
   // }
   Future<List<dynamic>> getAllCharacters() async {
     try {
-      Response response = await dio.get('characters');
-      return response.data;
+      Response response = await dio.get('character');
+      log('message');
+      return response.data['results'];
     } catch (e) {
+      log(e.toString());
+
       return [];
     }
   }
@@ -29,13 +35,14 @@ class CharactersWebServices {
         receiveTimeout: 20 * 1000);
     dio = Dio(options);
   }
-  Future <List<dynamic>> getQoutes(String charName) async {
+  Future<List<dynamic>> getQoutes(String charName) async {
     try {
-      Response response = await dio.get('qoute',queryParameters:{'author':charName});
+      Response response =
+          await dio.get('qoute', queryParameters: {'author': charName});
       return response.data;
     } on Exception catch (e) {
+      log(e.toString());
       return [];
     }
   }
-
 }

@@ -1,3 +1,5 @@
+import 'package:bb/presentation_layer/screens/splash_screen.dart';
+
 import 'Business_Logic_Layer/cubit/charcters_cubit.dart';
 import 'Data_layer/modles/Character.dart';
 import 'Data_layer/web_services/characters_web_services.dart';
@@ -18,6 +20,12 @@ class AppRouting {
   }
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      
+      case splashScreen:
+        return MaterialPageRoute(
+          builder: (context) =>
+             const SplashScreen(),
+        );
       case allCharactersRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
